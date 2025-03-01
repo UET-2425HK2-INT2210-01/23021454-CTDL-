@@ -1,0 +1,52 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int value;
+    Node* previous;
+    Node* next;
+    Node(int val) : value(val), previous(nullptr), next(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+    Node* tail;
+public:
+    DoublyLinkedList() : head(nullptr), tail(nullptr) {}
+
+    void insertAtEnd(int val) {
+        Node* newNode = new Node(val);
+        if (head == nullptr) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            newNode->previous = tail;
+            tail = newNode;
+        }
+    }
+
+    int countZeroSumTriplets() {
+        Node* current = head;
+        int count = 0;
+        while (current != nullptr && current->next != nullptr && current->next->next != nullptr) {
+            int sum = current->value + current->next->value + current->next->next->value;
+            if (sum == 0) count++;
+            current = current->next; 
+        }
+        return count;
+    }
+};
+
+int main() {
+    DoublyLinkedList dll;
+    
+    int n, num;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> num;
+        dll.insertAtEnd(num);
+    }
+    cout << dll.countZeroSumTriplets() << endl;
+    system("pause");
+}
