@@ -1,0 +1,83 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int value, priority;
+    Node* previous;
+    Node* next;
+
+    Node(int val, int prio) : value(val), priority(prio), previous(nullptr), next(nullptr) {}
+};
+
+class PriorityQueue {
+private:
+    Node* head;
+
+public:
+    PriorityQueue() : head(nullptr) {}
+
+    void enqueue(int val, int prio) {
+        Node* newNode = new Node(val, prio);
+        if (!head || head->priority < prio) {
+            newNode->next = head;
+            if (head) head->previous = newNode;
+            head = newNode;
+            return;
+        }
+
+        Node* current = head;
+        while (current->next && current->next->priority >= prio) {
+            current = current->next;
+        }
+
+        newNode->next = current->next;
+        if (current->next) {
+            current->next->previous = newNode;
+        }
+        current->next = newNode;
+        newNode->previous = current;
+    }
+
+    void dequeue() {
+        if (!head) {
+            cout << "Queue is empty!" << endl;
+            return;
+        }
+        Node* temp = head;
+        cout << "(" << temp->value << ", " << temp->priority << ") ";
+        head = head->next;
+        if (head) head->previous = nullptr;
+        delete temp;
+    }
+
+    void printQueue() {
+        Node* current = head;
+        while (current) {
+            cout << "(" << current->value << ", " << current->priority << ") ";
+            current = current->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    PriorityQueue queue;
+    int numOperations;
+    cin >> numOperations;
+
+    while (numOperations--) {
+        string command;
+        int val, prio;
+        cin >> command;
+        if (command == "enqueue") {
+            cin >> val >> prio;
+            queue.enqueue(val, prio);
+        }
+        else if (command == "dequeue") {
+            queue.dequeue();
+        }
+    }
+    queue.printQueue();
+
+    return 0;
+}
