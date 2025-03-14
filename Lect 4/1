@@ -1,0 +1,89 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int value;
+    Node* next;
+    Node(int val) : value(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+    
+public:
+    LinkedList() : head(nullptr) {}
+
+    void append(int val) {
+        Node* newNode = new Node(val);
+        if (!head) {
+            head = newNode;
+            return;
+        }
+        Node* current = head;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+
+    void search(int val) {
+        Node* current = head;
+        int position = 1;
+        while (current) {
+            if (current->value == val) {
+                cout << position << endl;
+                return;
+            }
+            current = current->next;
+            position++;
+        }
+        cout << "NO" << endl;
+    }
+
+    void reverse() {
+        Node* prevNode = nullptr;
+        Node* currentNode = head;
+        Node* nextNode = nullptr;
+        while (currentNode) {
+            nextNode = currentNode->next;
+            currentNode->next = prevNode;
+            prevNode = currentNode;
+            currentNode = nextNode;
+        }
+        head = prevNode;
+    }
+
+    void printList() {
+        Node* current = head;
+        while (current) {
+            cout << current->value << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    LinkedList list;
+    int numCommands;
+    cin >> numCommands;
+    while (numCommands--) {
+        string command;
+        int val;
+        cin >> command;
+        if (command == "append") {
+            cin >> val;
+            list.append(val);
+        }
+        else if (command == "search") {
+            cin >> val;
+            list.search(val);
+        }
+        else if (command == "reverse") {
+            list.reverse();
+        }
+    }
+    list.printList();
+    return 0;
+}
