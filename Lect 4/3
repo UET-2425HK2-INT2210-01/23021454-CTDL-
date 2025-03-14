@@ -1,0 +1,39 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+bool isBalanced(const string& expression) {
+    stack<char> bracketStack;
+    for (char bracket : expression) {
+        if (bracket == '(' || bracket == '[' || bracket == '{') {
+            bracketStack.push(bracket);
+        } 
+        else if (bracket == ')' || bracket == ']' || bracket == '}') {
+            if (bracketStack.empty()) {
+                return false; 
+            }
+            char topBracket = bracketStack.top();
+            if ((bracket == ')' && topBracket == '(') || 
+                (bracket == ']' && topBracket == '[') || 
+                (bracket == '}' && topBracket == '{')) {
+                bracketStack.pop(); 
+            } else {
+                return false; 
+            }
+        }
+    }
+    return bracketStack.empty(); 
+}
+
+int main() {
+    string userInput;
+    cin >> userInput;
+    
+    if (isBalanced(userInput)) {
+        cout << "Valid" << endl;
+    } else {
+        cout << "Invalid" << endl;
+    }
+    
+    return 0;
+}
